@@ -22,6 +22,11 @@ namespace DemonstrateMediatorPattern.BusinessLogic.Features.WeatherForecast
         {
             var forecast = _unitOfWork.Forecasts.GetByDate(request.Date);
 
+            if (forecast == null)
+            {
+                throw new BusinessException($"Couldn't find any weather info", 1001, System.Net.HttpStatusCode.InternalServerError);
+            }
+
             var response = _mapper.Map<WeatherForecastResponse>(forecast);
 
             return await Task.FromResult(response);
